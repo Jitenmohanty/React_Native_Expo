@@ -1,9 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useLocalSearchParams, Stack, router } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { icons } from '@/constants/icons';
-import { fetchMovieDetails } from '@/services/api';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
+import { useLocalSearchParams, router } from "expo-router";
+import { icons } from "@/constants/icons";
+import { fetchMovieDetails } from "@/services/api";
 
 const MovieDetails = () => {
   const { id } = useLocalSearchParams();
@@ -23,7 +29,7 @@ const MovieDetails = () => {
     Production?: string;
     Poster: string;
   }
-  
+
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,7 +40,7 @@ const MovieDetails = () => {
         setLoading(true);
         const data = await fetchMovieDetails(id as string);
         setMovie(data);
-      } catch (err:any) {
+      } catch (err: any) {
         setError(err?.message);
         console.error(err);
       } finally {
@@ -48,15 +54,15 @@ const MovieDetails = () => {
   }, [id]);
 
   // Calculate rating for display (similar to MovieCard)
-  const getRating = (rating = 'N/A') => {
-    return rating !== 'N/A'
+  const getRating = (rating = "N/A") => {
+    return rating !== "N/A"
       ? Math.round(parseFloat(rating) / 2)
       : Math.floor(Math.random() * 5) + 1;
   };
 
   if (loading) {
     return (
-      <View className="flex-1 bg-dark-100 justify-center items-center">
+      <View className="bg-primary flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="#FFFFFF" />
         <Text className="text-white mt-4">Loading movie details...</Text>
       </View>
@@ -65,14 +71,16 @@ const MovieDetails = () => {
 
   if (error) {
     return (
-      <View className="flex-1 bg-dark-100 justify-center items-center p-4">
-        <Text className="text-white text-center text-lg">Failed to load movie details.</Text>
-        <Text className="text-light-300 text-center mt-2">{error}</Text>
-        <TouchableOpacity 
-          className="mt-6 bg-primary px-6 py-3 rounded-lg"
+      <View className="bg-primary flex-1 justify-center items-center p-4">
+        <Text className="text-white text-center text-lg">
+          Failed to load movie details.
+        </Text>
+        <Text className="text-light-200 text-center mt-2">{error}</Text>
+        <TouchableOpacity
+          className="mt-6 bg-accent px-6 py-3 rounded-lg"
           onPress={() => router.back()}
         >
-          <Text className="text-white font-bold">Go Back</Text>
+          <Text className="text-white font-semibold">Go Back</Text>
         </TouchableOpacity>
       </View>
     );
@@ -83,118 +91,128 @@ const MovieDetails = () => {
   const displayRating = getRating(movie.imdbRating);
 
   return (
-    <>
-      <StatusBar style="light" />
-      <Stack.Screen
-        options={{
-          headerShown: true,
-          headerStyle: { backgroundColor: '#121212' },
-          headerTintColor: '#FFFFFF',
-          headerTitle: '',
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => router.back()}
-              className="flex-row items-center"
-            >
-           <Image source={icons.back} className="size-7 mr-2 " />
-
-              <Text className="text-white">Back</Text>
-            </TouchableOpacity>
-          ),
-        }}
-      />
-      
-      <ScrollView className="flex-1 bg-dark-100">
+    <View className="bg-primary flex-1">
+      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
         {/* Hero Section with Poster */}
-        <View className="relative">
+        <View>
           <Image
             source={{
-              uri: movie.Poster !== 'N/A' 
-                ? movie.Poster 
-                : 'https://placehold.co/600x400/1a1a1a/FFFFFF.png',
+              uri:
+                movie.Poster !== "N/A"
+                  ? movie.Poster
+                  : "https://placehold.co/600x400/1a1a1a/FFFFFF.png",
             }}
-            className="w-full h-72"
-            resizeMode="cover"
+            className="w-full h-[550px]"
+            resizeMode="stretch"
           />
-          
-          {/* Gradient Overlay */}
-          <View className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-dark-100 to-transparent" />
+
+          {/* Custom Back Button */}
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="absolute top-10 left-5 bg-dark-100 p-2 rounded-full"
+          >
+            <Image
+              source={icons.arrow}
+              className="size-6 rotate-180"
+              tintColor="#fff"
+            />
+          </TouchableOpacity>
+
+          {/* Play Button */}
+          <TouchableOpacity className="absolute bottom-5 right-5 rounded-full size-14 bg-white flex items-center justify-center">
+            <Image
+              source={icons.play}
+              className="w-6 h-7 ml-1"
+              resizeMode="stretch"
+            />
+          </TouchableOpacity>
         </View>
 
         {/* Movie Info */}
-        <View className="px-4 pt-2 pb-8">
+        <View className="flex-col items-start justify-center mt-5 px-5">
           {/* Title and Year */}
-          <View className="flex-row justify-between items-start mb-2">
-            <Text className="text-2xl font-bold text-white flex-1 pr-2">
-              {movie.Title}
-            </Text>
-            <Text className="text-light-300 text-base">
-              {movie.Year}
-            </Text>
+          <Text className="text-white font-bold text-xl">{movie.Title}</Text>
+          <View className="flex-row items-center gap-x-1 mt-2">
+            <Text className="text-light-200 text-sm">{movie.Year} •</Text>
+            <Text className="text-light-200 text-sm">{movie.Runtime}</Text>
           </View>
 
-          {/* Rating, Runtime, Genre */}
-          <View className="flex-row items-center mb-4">
-            <View className="flex-row items-center mr-4">
-              <Image source={icons.star} className="size-4 mr-1" />
-              <Text className="text-white">{displayRating}/5</Text>
-              <Text className="text-light-300 ml-1">({movie.imdbRating})</Text>
-            </View>
-            <Text className="text-light-300 mr-4">{movie.Runtime}</Text>
-            <Text className="text-light-300">{movie.Rated}</Text>
+          {/* Rating */}
+          <View className="flex-row items-center bg-dark-100 px-2 py-1 rounded-md gap-x-1 mt-2">
+            <Image source={icons.star} className="size-4" />
+            <Text className="text-white font-bold text-sm">
+              {displayRating}/5
+            </Text>
+            <Text className="text-light-200 text-sm">({movie.imdbRating})</Text>
           </View>
 
           {/* Genre Pills */}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-4">
-            {movie.Genre.split(', ').map((genre, index) => (
-              <View key={index} className="mr-2 px-3 py-1 bg-dark-200 rounded-full">
+          <View className="flex-row flex-wrap gap-2 mt-4">
+            {movie.Genre.split(", ").map((genre, index) => (
+              <View key={index} className="bg-dark-100 px-3 py-1 rounded-md">
                 <Text className="text-white text-xs">{genre}</Text>
               </View>
             ))}
-          </ScrollView>
+          </View>
 
           {/* Plot */}
-          <View className="mb-4">
+          <View className="mt-5">
             <Text className="text-white font-bold text-lg mb-2">Storyline</Text>
-            <Text className="text-light-300 leading-5">{movie.Plot}</Text>
+            <Text className="text-light-200 text-sm">{movie.Plot}</Text>
           </View>
 
           {/* Cast */}
-          <View className="mb-4">
+          <View className="mt-5">
             <Text className="text-white font-bold text-lg mb-2">Cast</Text>
-            <Text className="text-light-300">{movie.Actors}</Text>
+            <Text className="text-light-200 text-sm">{movie.Actors}</Text>
           </View>
 
           {/* Director */}
-          <View className="mb-4">
+          <View className="mt-5">
             <Text className="text-white font-bold text-lg mb-2">Director</Text>
-            <Text className="text-light-300">{movie.Director}</Text>
+            <Text className="text-light-200 text-sm">{movie.Director}</Text>
           </View>
 
           {/* Additional Info */}
-          <View>
+          <View className="mt-5">
             <Text className="text-white font-bold text-lg mb-2">Details</Text>
-            <View className="flex-row justify-between mb-2">
-              <Text className="text-light-300 flex-1">Released</Text>
-              <Text className="text-white flex-2">{movie.Released}</Text>
+            <View className="flex-row justify-between mb-2 gap-4">
+              <Text className="text-light-200 text-sm">Released</Text>
+              <Text className="text-white text-sm">{movie.Released}</Text>
             </View>
             <View className="flex-row justify-between mb-2">
-              <Text className="text-light-300 flex-1">Language</Text>
-              <Text className="text-white flex-2">{movie.Language}</Text>
+              <Text className="text-light-200 text-sm">Language</Text>
+              <Text className="text-white text-sm">{movie.Language}</Text>
             </View>
             <View className="flex-row justify-between mb-2">
-              <Text className="text-light-300 flex-1">Box Office</Text>
-              <Text className="text-white flex-2">{movie.BoxOffice || 'N/A'}</Text>
+              <Text className="text-light-200 text-sm">Box Office</Text>
+              <Text className="text-white text-sm">
+                {movie.BoxOffice || "N/A"}
+              </Text>
             </View>
             <View className="flex-row justify-between mb-2">
-              <Text className="text-light-300 flex-1">Production</Text>
-              <Text className="text-white flex-2">{movie.Production || 'N/A'}</Text>
+              <Text className="text-light-200 text-sm">Production</Text>
+              <Text className="text-white text-sm">
+                {movie.Production || "N/A"}
+              </Text>
             </View>
           </View>
         </View>
       </ScrollView>
-    </>
+
+      {/* Go Back Button */}
+      <TouchableOpacity
+        className="absolute bottom-14 left-0 right-0 mx-5 bg-accent rounded-lg py-3.5 flex flex-row items-center justify-center z-50"
+        onPress={() => router.back()}
+      >
+        <Image
+          source={icons.arrow}
+          className="size-5 mr-1 mt-0.5 rotate-180"
+          tintColor="#fff"
+        />
+        <Text className="text-white font-semibold text-base">Go Back</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
