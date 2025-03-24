@@ -8,8 +8,10 @@ import { icons } from "@/constants/icons";
 import SearchBar from "@/components/SearchBar";
 import MovieCard from "@/components/MovieCard";
 import { fetchBySearch, Movie } from "@/services/api";
+import { updateSearchCount } from "@/services/appwrite";
 
 const Search = () => {
+  
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [searchResults, setSearchResults] = useState<Movie[]>([]); // State for search results
@@ -28,6 +30,11 @@ const Search = () => {
 
     try {
       const movies = await fetchBySearch(searchQuery);
+      console.log(movies)
+      if(movies.length> 0 && movies?.[0]){
+        await updateSearchCount(searchQuery,movies[0])
+      }
+
       setSearchResults(movies || []); // Ensure searchResults is always an array
     } catch (err) {
       setError("Failed to fetch movies. Please try again.");

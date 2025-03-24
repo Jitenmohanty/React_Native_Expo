@@ -29,8 +29,8 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
     } else {
       await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
         searchTerm: query,
-        movie_id: movie.imdbID,
-        title: movie.Title,
+        imdbID: movie.imdbID,
+        Title: movie.Title,
         count: 1,
         Poster: movie.Poster,
       });

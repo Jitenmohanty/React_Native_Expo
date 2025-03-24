@@ -5,14 +5,14 @@ import { View, Text, TouchableOpacity, Image } from "react-native";
 import { images } from "@/constants/images";
 
 const TrendingCard = ({
-  movie: { movie_id, title, poster_url },
+  movie: { imdbID, Title, Poster },
   index,
 }: TrendingCardProps) => {
   return (
-    <Link href={`/movies/${movie_id}`} asChild>
+    <Link href={`/movies/${imdbID}`} asChild>
       <TouchableOpacity className="w-32 relative pl-5">
         <Image
-          source={{ uri: poster_url }}
+          source={{ uri: Poster }}
           className="w-32 h-48 rounded-lg"
           resizeMode="cover"
         />
@@ -35,7 +35,7 @@ const TrendingCard = ({
           className="text-sm font-bold mt-2 text-light-200"
           numberOfLines={2}
         >
-          {title}
+          {Title}
         </Text>
       </TouchableOpacity>
     </Link>

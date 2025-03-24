@@ -131,16 +131,6 @@ export const fetchMovieDetails = async (imdbID: string): Promise<MovieDetails> =
   }
 };
 
-// Fetch cast details for a specific movie
-export const fetchMovieCast = async (imdbID: string): Promise<string> => {
-  try {
-    const movieDetails = await fetchMovieDetails(imdbID);
-    return movieDetails.Actors;
-  } catch (error) {
-    console.error("Error fetching movie cast:", error);
-    throw error;
-  }
-};
 
 // Fetch movies by search query
 
@@ -160,7 +150,7 @@ export const fetchBySearch = async (searchParam: string): Promise<Movie[]> => {
     const data = await response.json() as OmdbSearchResponse;
 
     if (data.Response === "False") {
-      throw new Error(data.Error || "No movies found");
+      throw new Error("No movies found");
     }
 
     return data.Search || []; // Return an empty array if Search is undefined

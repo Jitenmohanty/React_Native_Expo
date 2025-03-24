@@ -15,6 +15,8 @@ import useFetch from "@/services/useFetch";
 import { fetchMovies } from "@/services/api";
 import SearchBar from "@/components/SearchBar";
 import MovieCard from "@/components/MovieCard";
+import { getTrendingMovies } from "@/services/appwrite";
+import TrendingCard from "@/components/TrendingCard";
 
 type Movie = {
   Poster: string;
@@ -33,6 +35,13 @@ const Index = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMoreYears, setHasMoreYears] = useState(true); // For tracking if we've gone too far back in years
 
+  //get trending movies
+  const {
+    data: trendingMovies,
+    loading: trendingLoading,
+    error: trendingError,
+  } = useFetch(getTrendingMovies);
+
   // Fetch movies using a modified version of useFetch
   const {
     data: movieData,
@@ -43,6 +52,8 @@ const Index = () => {
     page: currentPage, 
     year: currentYear 
   }));
+
+  console.log(trendingMovies,"trendingMovies")
 
   // Handle initial data load and page changes within the same year
   useEffect(() => {
@@ -131,7 +142,7 @@ const Index = () => {
     <View>
       {/* Logo */}
       <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
-
+  
       {/* Search Bar */}
       <SearchBar
         onPress={() => {
@@ -139,7 +150,30 @@ const Index = () => {
         }}
         placeholder="Search for a movie"
       />
-
+  
+      {/* Trending Movies Section */}
+      {trendingMovies && (
+        <View className="mt-10">
+          <Text className="text-lg text-white font-bold mb-3">
+            Trending Movies
+          </Text>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className="mb-4 mt-3"
+            data={trendingMovies}
+            contentContainerStyle={{
+              gap: 26,
+            }}
+            renderItem={({ item, index }) => (
+              <TrendingCard movie={item} index={index} />
+            )}
+            keyExtractor={(item) => String(item?.imdbID)}
+            ItemSeparatorComponent={() => <View className="w-4" />}
+          />
+        </View>
+      )}
+  
       {/* Latest Movies Section */}
       <Text className="text-lg text-white font-bold mt-5 mb-3">
         Latest Movies
@@ -190,13 +224,13 @@ const Index = () => {
       />
 
       {/* Initial Loading State */}
-      {moviesLoading && currentPage === 1 && currentYear === "2025" ? (
+      {moviesLoading && currentPage === 1 && currentYear === "2025" || trendingLoading ? (
         <ActivityIndicator
           size="large"
           color="#0000ff"
           className="mt-10 self-center"
         />
-      ) : moviesError && currentPage === 1 && !hasMoreYears ? (
+      ) : moviesError && trendingError &&  currentPage === 1 && !hasMoreYears ? (
         // Critical Error State - when we've tried all years and still have errors
         <Text className="text-red-500 text-center mt-10 px-5">
           Could not load any movies. Please try again later.
@@ -231,6 +265,7 @@ const Index = () => {
           onEndReachedThreshold={0.5}
           ListFooterComponent={ListFooterComponent}
         />
+
       )}
     </View>
   );
