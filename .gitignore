@@ -30,9 +30,12 @@ yarn-error.*
 *.pem
 
 # local env files
-.env*.local
+.env*  # Ignore all .env files, including .env, .env.local, .env.production, etc.
 
 # typescript
 *.tsbuildinfo
 
-app-example
+
+
+Movie_Drawer/.env
+

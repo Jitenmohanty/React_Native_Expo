@@ -1,50 +1,58 @@
-# Welcome to your Expo app 👋
+# 🎬 Movie Explorer App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native Expo app that lets users explore movies by year, search for their favorite films, and see trending movies. The app stores frequently searched movies using Appwrite and is compatible with both iOS and Android.
 
-## Get started
+## ✨ Features
 
-1. Install dependencies
+- 📅 **Home Page**: Displays movies year-wise  
+- 🔥 **Trending Movies**: Shows the latest trending movies at the top  
+- 🎭 **Movie deatails**: Shows the details of that movie
+- 🔍 **Movie Search**: Users can search for movies and get a list of results  
+- 📂 **Saved Movies & Profile Page**: (Not implemented yet)  
+- ☁️ **Appwrite Integration**: Frequently searched movies are stored for quick access  
+- 🎨 **Styling**: Uses NativeWind for styling  
+- 📱 **Cross-Platform**: Works on both iOS and Android  
 
-   ```bash
-   npm install
-   ```
+## 🛠️ Tech Stack
 
-2. Start the app
+- **Frontend**: React Native with Expo  
+- **Styling**: NativeWind  
+- **Backend & Database**: Appwrite (for storing frequently searched movies)  
 
-   ```bash
-    npx expo start
-   ```
+## 🚀 Getting Started
 
-In the output, you'll find options to open the app in a
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Jitenmohanty/React_Native_Expo.git
+   cd movie-drawer
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+2. Install dependencies:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+npm install
+3. Set up Appwrite:
 
-## Get a fresh project
+   Create an Appwrite project
 
-When you're ready, run:
+   Configure database and collections
 
-```bash
-npm run reset-project
-```
+4. Update environment variables with Appwrite credentials
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+5. Start the Expo development server:
 
-## Learn more
+   npx expo start
 
-To learn more about developing your project with Expo, look at the following resources:
+📸 Screenshots
+(Include screenshots of your app here)
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+🛠️ Future Improvements
+   Implement profile and save page
 
-## Join the community
+Optimize Appwrite queries
 
-Join our community of developers creating universal apps.
+📜 License
+This project is licensed under the MIT License.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+💡 Built with love using React Native, Expo, and Appwrite! 🎥
+
+   This gives a professional and clear overview of your app. Let me know if you want any modifications! 🚀
+
