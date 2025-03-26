@@ -1,8 +1,13 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const authRoutes = require('./routes/authRoutes');
-const connectDB = require('./config/connectDB');
+
+import express from "express"
+import cors from "cors"
+import dotenv from "dotenv"
+import authRoutes from "./routes/auth.Routes.js";
+import bookRoutes from "./routes/book.Routes.js";
+
+dotenv.config({
+    path: "./.env",
+  });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,9 +17,14 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+
 
 // Routes
 app.use('/api/auth', authRoutes);
+
+app.use('/api/books', bookRoutes);
+
 
 app.listen(PORT, () => {
     // Connect to MongoDB

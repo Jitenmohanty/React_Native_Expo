@@ -38,4 +38,9 @@ yarn-error.*
 
 
 Movie_Drawer/.env
+Online_Bookstore/backend/.env
 
+Online_Bookstore/backend/.env
+
+#git rm --cached Online_Bookstore/backend/.env    
+#git check-ignore -v Online_Bookstore/backend/.env
