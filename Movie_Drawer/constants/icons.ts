@@ -8,6 +8,12 @@ import play from "@/assets/icons/play.png";
 import arrow from "@/assets/icons/arrow.png";
 import back from "@/assets/icons/back.png";
 import saved from "@/assets/icons/saved.png";
+import removed from "@/assets/icons/removed.png";
+import instagram from "@/assets/icons/instagram.png";
+import gmail from "@/assets/icons/gmail.png";
+import linkedin from "@/assets/icons/linkedin.png";
+import twitter from "@/assets/icons/twitter.png";
+import github from "@/assets/icons/github.png";
 
 export const icons = {
   home,
@@ -19,5 +25,11 @@ export const icons = {
   star,
   play,
   arrow,
-  back
+  back,
+  removed,
+  instagram,
+  gmail,
+  linkedin,
+  twitter,
+  github
 };

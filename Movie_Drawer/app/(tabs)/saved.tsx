@@ -7,11 +7,13 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { Link } from "expo-router";
+import { images } from "@/constants/images";
 
 const Saved = () => {
   const [savedMovies, setSavedMovies] = useState<any[]>([]);
@@ -43,6 +45,44 @@ const Saved = () => {
     }
   };
 
+  // Remove a movie from saved list
+  const removeMovie = async (id: string) => {
+    try {
+      // Filter out the movie with the matching ID
+      const updatedMovies = savedMovies.filter((movie) => movie.imdbID !== id);
+
+      // Update state
+      setSavedMovies(updatedMovies);
+
+      // Save updated list to AsyncStorage
+      await AsyncStorage.setItem("savedDataKey", JSON.stringify(updatedMovies));
+    } catch (error) {
+      console.error("Failed to remove movie:", error);
+      Alert.alert("Error", "Failed to remove movie from saved list");
+      // Refresh the list to ensure UI is in sync with storage
+      fetchSavedMovies();
+    }
+  };
+
+  // Confirm before removing
+  const confirmRemove = (id: string, title: string) => {
+    Alert.alert(
+      "Remove Movie",
+      `Are you sure you want to remove "${title}" from your saved list?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Remove",
+          onPress: () => removeMovie(id),
+          style: "destructive",
+        },
+      ]
+    );
+  };
+
   // Fetch on initial load
   useEffect(() => {
     fetchSavedMovies();
@@ -57,14 +97,9 @@ const Saved = () => {
   );
 
   const renderMovieItem = ({ item }: { item: any }) => (
-    <Link
-      href={{
-        pathname: "../movies/[id]",
-        params: { id: item.imdbID }, // Pass imdbID as the dynamic route parameter
-      }}
-      asChild
-    >
-      <View className="flex-row items-center p-4 border-b border-gray-800">
+    <View className="mb-4 mx-2 bg-gray-900 rounded-xl overflow-hidden shadow-lg">
+      <View className="flex-row">
+        {/* Movie Poster */}
         <Image
           source={{
             uri:
@@ -72,33 +107,61 @@ const Saved = () => {
                 ? item.Poster
                 : "https://placehold.co/600x400/1a1a1a/FFFFFF.png",
           }}
-          className="w-16 h-24 rounded-md mr-4"
+          className="w-24 h-36"
           resizeMode="cover"
         />
-        <View className="flex-1">
-          <Text className="text-white font-bold text-lg" numberOfLines={1}>
-            {item.Title}
-          </Text>
-          <Text className="text-gray-400 text-sm">{item.Year}</Text>
-          <View className="flex-row items-center mt-1">
-            <Image source={icons.star} className="w-4 h-4 mr-1" />
-            <Text className="text-yellow-400 text-sm">
-              {item.imdbRating !== "N/A"
-                ? Math.round(parseFloat(item.imdbRating) / 2)
-                : "N/A"}
-            </Text>
+
+        {/* Movie Details */}
+        <Link
+          href={{
+            pathname: "/movies/[id]",
+            params: { id: item.imdbID },
+          }}
+          className="flex-1"
+        >
+          <View className="p-3 flex-1 justify-between h-36">
+            <View>
+              <Text className="text-white font-bold text-lg" numberOfLines={1}>
+                {item.Title}
+              </Text>
+              <Text className="text-gray-400 text-sm mb-1">{item.Year}</Text>
+
+              <View className="flex-row items-center">
+                <Image source={icons.star} className="w-4 h-4 mr-1" />
+                <Text className="text-yellow-400 text-sm">
+                  {item.imdbRating !== "N/A"
+                    ? Math.round(parseFloat(item.imdbRating) / 2)
+                    : "N/A"}
+                </Text>
+              </View>
+            </View>
+
+            <View className="flex-row items-center">
+              <Text className="text-gray-400 text-xs">{item.Type}</Text>
+            </View>
           </View>
-        </View>
+        </Link>
+
+        {/* Remove Button - Positioned on the right side */}
+        <TouchableOpacity
+          onPress={() => confirmRemove(item.imdbID, item.Title)}
+          className="p-3 justify-center items-center w-12"
+          hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+        >
+          <Image
+            source={icons.removed}
+            className="w-6 h-6"
+            tintColor="#FF6B6B"
+          />
+        </TouchableOpacity>
       </View>
-    </Link>
+    </View>
   );
 
   if (loading) {
     return (
       <SafeAreaView className="bg-primary flex-1 px-10">
-        <View className="flex justify-center items-center flex-1">
-          <Text className="text-white">Loading...</Text>
-        </View>
+        <ActivityIndicator size="large" color="#0000ff" className="my-3" />
       </SafeAreaView>
     );
   }
@@ -119,8 +182,15 @@ const Saved = () => {
 
   return (
     <SafeAreaView className="bg-primary flex-1">
-      <View className="px-4 py-6 pb-32">
-        <Text className="text-white text-2xl font-bold mb-6">Saved Movies</Text>
+      <Image
+        source={images.bg}
+        className="flex-1 absolute w-full z-0"
+        resizeMode="cover"
+      />
+      <View className="px-2 py-6 pb-36">
+        <Text className="text-white text-2xl font-bold mb-6 px-2">
+          Saved Movies
+        </Text>
         <FlatList
           data={savedMovies}
           renderItem={renderMovieItem}

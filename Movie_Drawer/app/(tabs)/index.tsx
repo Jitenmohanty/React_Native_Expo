@@ -209,10 +209,10 @@ const Index = () => {
     return null;
   };
 
-  // Debug logging
-  console.log(
-    `Movies: ${allMovies.length}, Year: ${currentYear}, Page: ${currentPage}, Total: ${totalResults}`
-  );
+   // Debug logging
+  // console.log(
+  //   `Movies: ${allMovies.length}, Year: ${currentYear}, Page: ${currentPage}, Total: ${totalResults}`
+  // );
 
   return (
     <View className="flex-1 bg-primary">

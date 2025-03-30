@@ -13,6 +13,7 @@ import { fetchMovieDetails } from "@/services/api";
 
 const MovieDetails = () => {
   const { id } = useLocalSearchParams();
+  
   interface MovieDetails {
     Title: string;
     Year: string;

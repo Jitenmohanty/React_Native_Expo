@@ -123,7 +123,7 @@ export const fetchMovieDetails = async (imdbID: string): Promise<MovieDetails> =
       throw new Error(data.Error || "Movie details not found");
     }
 
-    console.log("Fetched movie details:", data);
+    // console.log("Fetched movie details:", data);
     return data;
   } catch (error) {
     console.error("Error fetching movie details:", error);
