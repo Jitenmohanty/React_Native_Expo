@@ -22,7 +22,6 @@ const Saved = () => {
   const fetchSavedMovies = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("savedDataKey");
-      console.log("Retrieved saved data:", jsonValue);
 
       if (jsonValue !== null) {
         // Parse the stored JSON array

@@ -99,7 +99,7 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary flex-1 ">
+    <View className="bg-primary flex-1 ">
       <Image
         source={images.bg}
         className="flex-1 absolute w-full z-0"
@@ -118,14 +118,14 @@ const Profile = () => {
             </View>
           </View>
 
-          <Text className="text-white text-2xl font-bold">Your Name</Text>
+          <Text className="text-white text-2xl font-bold">Jiten Mohanty</Text>
           <Text className="text-gray-300 text-lg">
             Full Stack & Mobile Developer
           </Text>
         </View>
 
         {/* About section */}
-        <View className=" rounded-t-3xl px-6 pt-8 pb-28">
+        <View className=" rounded-t-3xl px-6 pt-8 pb-32">
           <View className="mb-8">
             <Text className="text-white text-xl font-bold mb-4">About Me</Text>
             <Text className="text-gray-300 leading-6">
@@ -191,7 +191,7 @@ const Profile = () => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
