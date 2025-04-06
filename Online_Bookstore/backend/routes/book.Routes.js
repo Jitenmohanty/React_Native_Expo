@@ -1,6 +1,7 @@
 import express from "express";
-import { authMiddleware } from "../middleware/authMiddleware";
-import { upload } from "../middleware/multer.midileware";
+import { authMiddleware } from "../middleware/authMiddleware.js";
+import { upload } from "../middleware/multer.midileware.js";
+import { createBook, deleteBook, getAllBooks, getBooksByUser, updateBook } from "../controllers/book.Controller.js";
 
 const router = express.Router();
 
