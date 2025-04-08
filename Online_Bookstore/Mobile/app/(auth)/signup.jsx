@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import { Image } from "expo-image";
 import {  router } from "expo-router";
@@ -13,17 +14,23 @@ import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "../../assets/styles/signup.styles";
 import COLORS from "../../constants/colors";
+import { useAuthStore } from "../../store/authStore";
 
 export default function signUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(true);
-  const [isLoading, setIsloading] = useState(false);
 
-  const handleSignup = () => {
-    // Handle login logic here
-    console.log("Signup clicked");
+  const {user, isLoading, register} = useAuthStore()
+
+  const handleSignup = async() => {
+   
+    // console.log(username,email,password)
+      const result = await register(username,email,password);
+
+      if(!result.success) Alert.alert("Error",result.error)
+
   };
 
   return (
